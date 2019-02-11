@@ -35,11 +35,11 @@ public class Gtries {
 	static Broadcast<Integer> broadcastMotifSize;
 	static Broadcast<Integer> broadcastGraphSize;
 	static Broadcast<Integer> broadAuxNotProcessed;
-    public static ArrayList<String> restNotProcessedArr  =  new ArrayList<String>();
+    	public static ArrayList<String> restNotProcessedArr  =  new ArrayList<String>();
 	public static double [] freqs;
 	static Broadcast<Double> broadcastStepTime;
 	static Broadcast<Integer> broadcastTotalNumMappers;
-    static Accumulator<Double> accDiffTime;
+    	static Accumulator<Double> accDiffTime;
 	static Accumulator<Integer> accNumMappers;
 	static Accumulator<Double> accTimeMappers;
 	
@@ -52,8 +52,6 @@ public class Gtries {
 	static Accumulator<Double> accFill;
 	
 	//static Accumulator<Double []>  frequencies;
-	
-	
 	
 	public static GraphMatrix loadGraph(String graph_file , boolean dir) throws IOException
 	{
@@ -86,7 +84,6 @@ public class Gtries {
 		        ints = line.split(" ");
 		        a = Integer.parseInt(ints[0]);
 		        b = Integer.parseInt(ints[1]);
-		        c = Integer.parseInt(ints[2]);
 		    	va.add(a);
 				vb.add(b);
 				if (a > max)
@@ -644,8 +641,10 @@ public class Gtries {
 		
 		//Setting the Static variables of GTrieNode which are common between all workers 
 		GTrieNode.numNodes = numNodes;
+		//TODO
 		GTrieNode.fastnei = g.matrixNeighbours();
-		GTrieNode.adjM = g.adjacencyMatrix();
+		//GTrieNode.adjM = g.adjacencyMatrix();
+		GTrieNode.adj_neighbors = g.adjacencyNeighborsHashSet();
 		GTrieNode.numnei = g.arrayNumNeighbours();
 		if (g.type() == GraphType.DIRECTED) GTrieNode.isdir = true;
 		else                       			GTrieNode.isdir = false;

@@ -22,9 +22,13 @@ public class GTrieNode {
 	private static final int BASE_BITS = 6;
 	//public static int[] mymap;
 	//public static boolean[] used;
+
 	public static int numNodes;
+	
+	public static HashSet<Integer>[] adj_neighbors;
 	public static int[][] fastnei;
-	public static boolean[][] adjM;
+	//public static boolean[][] adjM;
+	
 	public static int[] numnei;
 	public static boolean isdir;
 	public static int statCounter = 0;
@@ -408,7 +412,8 @@ public class GTrieNode {
 			for (j = 0; j < data.glk; j++)
 			{
 				
-				test = adjM[data.mymap[j]][i];
+				//test = adjM[data.mymap[j]][i];
+				test = adj_neighbors[data.mymap[j]].contains(i);
 				if (in[j] != test)
 					break;
 			}	
@@ -416,12 +421,14 @@ public class GTrieNode {
 			if (j < data.glk)
 				continue;
 			
-			boolean b = adjM[i][0];
+			//boolean b = adjM[i][0];
+			boolean b = adj_neighbors[i].contains(0);
 			//boolean test;
 			for (j = 0; j < data.glk; j++)
 			{
 				
-				test =  adjM[i][data.mymap[j]]; 
+				//test =  adjM[i][data.mymap[j]]; 
+				test = adj_neighbors[i].contains(data.mymap[j]);
 			  if (out[j] != test)
 				  break;
 			}
@@ -560,11 +567,13 @@ public class GTrieNode {
 			data.mymap[data.glk] = i;
 	    
 			
-			boolean b = adjM[i][0];
+			//boolean b = adjM[i][0];
+			boolean b = adj_neighbors[i].contains(0);
 			boolean test;
 			for (j = 0; j < data.glk; j++)
 			{
-				test = adjM[i][data.mymap[j]];
+				//test = adjM[i][data.mymap[j]];
+				test = adj_neighbors[i].contains(data.mymap[j]);
 				if (out[j] != test)
 				  break;
 			}
@@ -672,7 +681,8 @@ public class GTrieNode {
 			for (j = 0; j < data.glk; j++)
 			{
 				
-				test = adjM[data.mymap[j]][i];
+				//test = adjM[data.mymap[j]][i];
+				test = adj_neighbors[data.mymap[j]].contains(i);
 				if (in[j] != test)
 					break;
 			}	
@@ -681,12 +691,14 @@ public class GTrieNode {
 				continue;
 			}				
 			
-			boolean b = adjM[i][0];
+			//boolean b = adjM[i][0];
+			boolean b = adj_neighbors[i].contains(0);
 			//boolean test;
 			for (j = 0; j < data.glk; j++)
 			{
 				
-				test =  adjM[i][data.mymap[j]]; 
+				//test =  adjM[i][data.mymap[j]]; 
+				test = adj_neighbors[i].contains(data.mymap[j]);
 			  if (out[j] != test)
 				  break;
 			}

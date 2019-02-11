@@ -26,8 +26,9 @@ public class GraphMatrix {
 	  private int[] _out;
 	  private int[] _num_neighbours;
 
-	  private boolean[][] _adjM;
+	  //private boolean[][] _adjM;
 	  private int[][] _array_neighbours;
+	  private HashSet<Integer>[] _adj_neighbors;
 	  private ArrayList<Integer>[] _adjOut;
 	  private ArrayList<Integer>[] _adjIn;
 	  private ArrayList<Integer>[] _neighbours;
@@ -40,7 +41,8 @@ public class GraphMatrix {
 	  {
 		_num_nodes = _num_edges = 0;
 
-		_adjM = null;
+		//_adjM = null;
+		_adj_neighbors = null;
 		_adjOut = null;
 		_adjIn = null;
 		_neighbours = null;
@@ -54,7 +56,7 @@ public class GraphMatrix {
 	  {
 		int i;
 
-		if (_adjM != null)
+		/*if (_adjM != null)
 		{
 		  for (i = 0; i < _num_nodes; i++)
 		  {
@@ -64,6 +66,10 @@ public class GraphMatrix {
 			}
 		  }
 		  _adjM = null;
+		}*/
+		if (_adj_neighbors != null)
+		{
+			_adj_neighbors = null;
 		}
 		if (_adjIn != null)
 		{
@@ -128,13 +134,17 @@ public class GraphMatrix {
 	  {
 		_delete();
 	  }
+
 	  //@Override
-	  public final boolean[][] adjacencyMatrix()
+	  /*public final boolean[][] adjacencyMatrix()
 	  {
 		  return _adjM;
+	  }*/
+	  public final HashSet<Integer>[] adjacencyNeighborsHashSet() {
+  		return _adj_neighbors;
 	  }
-	  
-	 // @Override
+
+	  // @Override
 	  public final void createGraph(int n, GraphType t)
 	  {
 		int i;
@@ -144,11 +154,12 @@ public class GraphMatrix {
 
 		_delete();
 
-		_adjM = new boolean[n][];
+		/*_adjM = new boolean[n][];
 		for (i = 0; i < n; i++)
 		{
 			_adjM[i] = new boolean[n];
-		}
+		}*/
+		_adj_neighbors = (HashSet<Integer>[])new HashSet[n];
 		_adjIn = (ArrayList<Integer>[])new ArrayList[n];
 		_adjOut = (ArrayList<Integer>[])new ArrayList[n];
 		_neighbours = (ArrayList<Integer>[])new ArrayList[n];
@@ -179,20 +190,21 @@ public class GraphMatrix {
 		  _num_neighbours[i] = 0;
 		  //_adjIn.get(i) = new ArrayList<Integer>();
 		  //_adjIn.get(i).clear();
-		  _adjIn[i] = new ArrayList<Integer>();
-		  _adjOut[i] = new ArrayList<Integer>();
-		  _neighbours[i] = new ArrayList<Integer>();
-		  
+		   _adj_neighbors[i] = new HashSet<Integer>();
+		   _adjIn[i] = new ArrayList<Integer>();
+		   _adjOut[i] = new ArrayList<Integer>();
+		   _neighbours[i] = new ArrayList<Integer>();
+		   
+		  _adj_neighbors[i].clear(); 
 		  _adjIn[i].clear();
-		  _neighbours[i] = new ArrayList<Integer>();
+		  //_neighbours[i] = new ArrayList<Integer>();
 		  
 		  _adjOut[i].clear();
 		  _neighbours[i].clear();
-		  
-		  for (j = 0; j < _num_nodes;j++)
+		  /*for (j = 0; j < _num_nodes;j++)
 		  {
 			_adjM[i][j] = false;
-		  }
+		  }*/
 		}
 	  }
 
@@ -211,11 +223,12 @@ public class GraphMatrix {
 	  public final void addEdge(int a, int b)
 	  {
 
-		if (_adjM[a][b])
-			return;
+		//if (_adjM[a][b])
+		//	return;
 
-		_adjM[a][b] = true;
+		//_adjM[a][b] = true;
 
+		_adj_neighbors[a].add(b);
 		_adjOut[a].add(b);
 		_out[a]++;
 
@@ -224,7 +237,8 @@ public class GraphMatrix {
 
 		_num_edges++;
 
-		if (!_adjM[b][a])
+		//if (!_adjM[b][a])
+		if (!_adj_neighbors[b].contains(a))
 		{
 		  _neighbours[a].add(b);
 		  _num_neighbours[a]++;
@@ -242,10 +256,14 @@ public class GraphMatrix {
 	  public final void rmEdge(int a, int b)
 	  {
 
-		if (!_adjM[a][b])
+		if (!_adj_neighbors[a].contains(b))
 			return;
+		_adj_neighbors[a].remove(b);
 
-		_adjM[a][b] = false;
+		//if (!_adjM[a][b])
+		//	return;
+
+	  	//_adjM[a][b] = false;
 
 		_removeVector(_adjOut[a], b);
 		_out[a]--;
@@ -255,7 +273,8 @@ public class GraphMatrix {
 
 		_num_edges--;
 
-		if (!_adjM[b][a])
+		//if (!_adjM[b][a])
+		if (!_adj_neighbors[b].contains(a))
 		{
 		  _removeVector(_neighbours[a], b);
 		  _num_neighbours[a]--;
@@ -267,12 +286,14 @@ public class GraphMatrix {
 	  //@Override
 	  public final boolean hasEdge(int a, int b)
 	  {
-		  return _adjM[a][b];
+		  //return _adjM[a][b];
+		  return _adj_neighbors[a].contains(b);
 	  }
 	  //@Override
 	  public final boolean isConnected(int a, int b)
 	  {
-		  return _adjM[a][b] || _adjM[b][a];
+		  //return _adjM[a][b] || _adjM[b][a];
+		  return _adj_neighbors[a].contains(b) ||  _adj_neighbors[b].contains(a);
 	  }
 
 	  //@Override
@@ -304,7 +325,7 @@ public class GraphMatrix {
 			Collections.sort(_neighbours[i]);
 		}
 	  }
-	 // @Override
+	  // @Override
 	  public final void sortNeighboursArray()
 	  {
 		int i;
@@ -332,7 +353,7 @@ public class GraphMatrix {
 		  }
 		  _neighbours[i].clear();
 		}
-	  }
+	 }
 	 // @Override
 	  public final void makeVectorNeighbours()
 	  {
@@ -393,7 +414,6 @@ public class GraphMatrix {
 	  //@Override
 	  public final ArrayList<Integer> inEdges(int a)
 	  {
-		  
 		  return _adjIn[a];
 	  }
 	  
